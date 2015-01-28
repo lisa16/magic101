@@ -26,6 +26,8 @@ public class KinectManager : MonoBehaviour
 	// GUI output
 	private UnityEngine.Color[] bodyColors;
 	private string[] bodyText;
+
+	private CharacterController characterController;
 	
 	/// <summary> List of gesture detectors, there will be one detector created for each potential body (max of 6) </summary>
 	private List<GestureDetector> gestureDetectorList = null;
@@ -35,7 +37,7 @@ public class KinectManager : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		
+		characterController = GetComponent<CharacterController> ();
 		//_effects.Add (_lightening);
 		
 		// GUI color and text objects
@@ -121,8 +123,18 @@ public class KinectManager : MonoBehaviour
 				_hurricane.Play();
 			}
 			break;
-			
 		}
+	}
+
+	public void TurnLeft(float amount)
+	{
+		transform.Rotate (Vector3.down * amount * 2);
+	}
+
+	public void Walk(float speed)
+	{
+		Vector3 difference = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position - this.transform.position;
+		characterController.SimpleMove (difference * speed);
 	}
 	
 	// Update is called once per frame

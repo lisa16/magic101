@@ -34,7 +34,7 @@ public class GestureEventArgs : EventArgs
 public class GestureDetector : IDisposable
 {
 	/// <summary> Path to the gesture database that was trained with VGB </summary>
-	private readonly string gestureDatabase = "liftarmcast4.gbd";
+	private readonly string gestureDatabase = "liftarmcast6.gbd";
 	
 	/// <summary> Name of the discrete gesture in the database that we want to track </summary>
 	//private readonly string seatedGestureName = "handUp";
@@ -42,6 +42,12 @@ public class GestureDetector : IDisposable
 //	private readonly string meteor = "walking";
 	private readonly string lightening = "liftarmhigh";
 	private readonly string meteor = "liftarmcast";
+
+	private readonly string turnLeft = "turn_Left";
+	private readonly string turnRight = "turn_Right";
+
+	private readonly string walking = "walking";
+	
 	
 	/// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
 	private VisualGestureBuilderFrameSource vgbFrameSource = null;
@@ -92,15 +98,20 @@ public class GestureDetector : IDisposable
 //					this.vgbFrameSource.AddGesture(gesture);
 //					Debug.Log(gesture.Name);
 //				}
-				if (gesture.Name.Equals (this.lightening))
+//				if (gesture.Name.Equals (this.lightening))
+//				{
+//					this.vgbFrameSource.AddGesture(gesture);
+////					Debug.Log(gesture.Name);
+//				}
+//				if (gesture.Name.Equals (this.meteor))
+//				{
+//					this.vgbFrameSource.AddGesture(gesture);
+////					Debug.Log(gesture.Name);
+//				}
+
+				if(gesture.Name == lightening || gesture.Name == meteor || gesture.Name == turnLeft || gesture.Name == turnRight || gesture.Name == walking)
 				{
 					this.vgbFrameSource.AddGesture(gesture);
-//					Debug.Log(gesture.Name);
-				}
-				if (gesture.Name.Equals (this.meteor))
-				{
-					this.vgbFrameSource.AddGesture(gesture);
-//					Debug.Log(gesture.Name);
 				}
 			}
 		}
@@ -227,20 +238,32 @@ public class GestureDetector : IDisposable
 								}
 							}
 						}
-//						if (gesture.Name.Equals(this.meteor) && gesture.GestureType == GestureType.Discrete)
-//						{
-//							DiscreteGestureResult result = null;
-//							discreteResults.TryGetValue(gesture, out result);
-//							
-//							if (result != null)
-//							{
-//								if(this.OnGestureDetected != null && result.Confidence >= .7f)
-//								{
-//									Debug.Log ("hurricane fired");
-//									kinectManager.ActivateSpell(4);
-//								}
-//							}
-//						}
+						if (gesture.Name == turnLeft && gesture.GestureType == GestureType.Discrete)
+						{
+							DiscreteGestureResult result = null;
+							discreteResults.TryGetValue(gesture, out result);
+							
+							if (result != null)
+							{
+								if(this.OnGestureDetected != null && result.Confidence >= .3f)
+								{
+									kinectManager.TurnLeft(result.Confidence);
+								}
+							}
+						}
+						if (gesture.Name == turnRight && gesture.GestureType == GestureType.Discrete)
+						{
+							DiscreteGestureResult result = null;
+							discreteResults.TryGetValue(gesture, out result);
+							
+							if (result != null)
+							{
+								if(this.OnGestureDetected != null && result.Confidence >= .3f)
+								{
+									kinectManager.TurnLeft(-result.Confidence);
+								}
+							}
+						}
 						if (gesture.Name.Equals(this.meteor) && gesture.GestureType == GestureType.Discrete)
 						{
 							DiscreteGestureResult result = null;
@@ -250,12 +273,23 @@ public class GestureDetector : IDisposable
 							{
 								if(this.OnGestureDetected != null && result.Confidence == 1)
 								{
-//									Debug.Log ("meteor fired");
 									kinectManager.ActivateSpell(2);
 								}
 							}
 						}
-						
+						if (gesture.Name == walking && gesture.GestureType == GestureType.Discrete)
+						{
+							DiscreteGestureResult result = null;
+							discreteResults.TryGetValue(gesture, out result);
+							
+							if (result != null)
+							{
+								if(this.OnGestureDetected != null && result.Confidence == 1)
+								{
+									kinectManager.Walk(result.Confidence);
+								}
+							}
+						}
 					}
 				}
 				
