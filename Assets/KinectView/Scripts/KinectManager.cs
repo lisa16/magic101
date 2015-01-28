@@ -28,6 +28,7 @@ public class KinectManager : MonoBehaviour
 	private string[] bodyText;
 
 	private CharacterController characterController;
+	private UnityEngine.AudioSource[] audioSources;
 	
 	/// <summary> List of gesture detectors, there will be one detector created for each potential body (max of 6) </summary>
 	private List<GestureDetector> gestureDetectorList = null;
@@ -38,6 +39,7 @@ public class KinectManager : MonoBehaviour
 	void Start()
 	{
 		characterController = GetComponent<CharacterController> ();
+		audioSources = GetComponents<UnityEngine.AudioSource> ();
 		//_effects.Add (_lightening);
 		
 		// GUI color and text objects
@@ -135,6 +137,8 @@ public class KinectManager : MonoBehaviour
 	{
 		Vector3 difference = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position - this.transform.position;
 		characterController.SimpleMove (difference * speed);
+		if(!audioSources[0].isPlaying)
+			audioSources[0].Play();
 	}
 	
 	// Update is called once per frame
