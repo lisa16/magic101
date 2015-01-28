@@ -91,22 +91,35 @@ public class KinectManager : MonoBehaviour
 		switch (i) {
 		case 1:
 			if(_lightening.isStopped)
+			{
+				_lightening.transform.position = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
 				_lightening.Play();
+			}
+				
 			break;
 			
 		case 2:
 			if(_meteor.isStopped)
-				_meteor.Play ();
+			{
+				_meteor.transform.position = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
+				_meteor.Play();
+			}
 			break;
 			
 		case 3:
 			if(_arcane.isStopped)
-				_arcane.Play ();
+			{
+				_arcane.transform.position = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
+				_arcane.Play();
+			}
 			break;
 			
 		case 4:
 			if(_hurricane.isStopped)
-				_hurricane.Play ();
+			{
+				_hurricane.transform.position = GameObject.FindGameObjectWithTag("SpawnPoint").transform.position;
+				_hurricane.Play();
+			}
 			break;
 			
 		}
